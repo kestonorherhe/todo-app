@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-import update from 'react-addons-update'
 import './style.css'
 
 class TaskList extends Component {

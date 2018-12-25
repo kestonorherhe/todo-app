@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 import './style.css'
 
 class TaskList extends Component {
@@ -9,15 +10,22 @@ class TaskList extends Component {
                 count: 1,
                 list : []
             },
+            todos: this.props.todos,
             todo: {},
         };
         this.handleCheck = this.handleCheck.bind(this)
+        this.handleDelete = this.handleDelete.bind(this)
     }
 
     //  handle checkbox
     handleCheck =  async e  => {
         // e.preventDefault()
         this.props.onCheck(e)
+    }
+
+    // handle delete
+    handleDelete = (e, todo) => {
+        this.props.onDelete(todo)
     }
     render() {
         // console.log(this.props)
@@ -44,7 +52,9 @@ class TaskList extends Component {
                                                 {todo.title}
                                                 <div class="float-right">
                                                     <span class={ `mr-2 badge badge-${ todo.priority }` }>{todo.tag}</span>
-                                                    <a class='todo-item-delete'><i class="icon-trash"></i></a>
+                                                    <a
+                                                    onClick={ e => this.handleDelete(e,todo) }
+                                                    class='todo-item-delete'><i class="icon-trash"></i></a>
                                                 </div>
                                             </div>
                                             <span class="todo-desc">{todo.desc}</span>

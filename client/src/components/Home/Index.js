@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios'
 import update from 'react-addons-update'
 import _ from 'lodash'
 
@@ -15,6 +16,7 @@ export default class Index extends Component {
             todo: {}
         };
         this.handleCheck = this.handleCheck.bind(this)
+        this.handleDelete = this.handleDelete.bind(this)
     }
 
     route = (url, param) => {
@@ -122,9 +124,29 @@ export default class Index extends Component {
             this.callApi(this.route(url,param));
         }
     }
+
+    // handle delete
+    handleDelete = async todo => {
+        const originalState = this.state.todos
+
+        this.setState({ todos: this.state.todos.filter(t => t._id !== todo._id, {}) })
+
+        const response = await fetch(`/api/v1/todo-id/${ todo._id }`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: todo._id })
+        })
+        const res = await response
+        if (res.status !== 200) {
+            this.setState({ todos: originalState })
+        }
+
+    }
     render() {
         const { todos } = this.state
-        const { handleMouseEnter, handleCheck } = this
+        const { handleMouseEnter, handleCheck, handleDelete } = this
         return <div>
             <div class="app-content content">
                 <Navbar todos = { todos } />
@@ -137,6 +159,7 @@ export default class Index extends Component {
                             <TaskList 
                             todos = { todos }
                             onCheck = { handleCheck }
+                            onDelete = { handleDelete }
                             />
                         </div>
                         </div>

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import update from 'react-addons-update'
+import _ from 'lodash'
+
 import SearchForm from '../SearchForm/Index';
 import TaskList from '../Task/TaskList/Index';
 import Navbar from '../Navbar/Index';
@@ -12,7 +14,6 @@ export default class Index extends Component {
             todos: [],
             todo: {}
         };
-        this.handleMouseEnter = this.handleMouseEnter.bind(this)
         this.handleCheck = this.handleCheck.bind(this)
     }
 
@@ -50,37 +51,12 @@ export default class Index extends Component {
         this.callApi(this.route(url,param))
     }
 
-    // handle mouse enter event
-    handleMouseEnter = e => {
-        // this filters the needed todo item from the array
-        const todo = this.state.todos.filter(t => t._id === e.target.value)
-
-        todo.map(t => {
-            const prevState = this.state
-            const newState = update(prevState, {
-                todo: {
-                    $set:
-                    {
-                        '_id': t._id,
-                        title: t.title,
-                        tag: t.tag,
-                        priority: t.priority,
-                        'status': t.status,
-                        'desc': t.desc,
-                        'checked': t.checked
-                    }
-                }
-            })
-            this.setState({ todo: newState.todo })
-            // console.log(this.state.todo)
-        })
-    }
-
     //  handle checkbox
     handleCheck = async e => {
+        const filter = _.find(this.state.todos, { '_id': e._id })
         const url = this.props.match;
         const param = this.props.match.params.param
-        if (this.state.todo.status === 'completed') {
+        if (filter.status === 'completed') {
             const prevState = this.state
             const newState = update(prevState, {
                 todo: {
@@ -91,7 +67,19 @@ export default class Index extends Component {
                 }
             })
 
-            const response = await fetch(`/api/v1/todo-id/${ e.target.value }`, {
+            const newTodo = this.state.todos.map(todo => {
+                if(todo._id === e._id) {
+                    return Object.assign({}, todo, {
+                        status: 'uncompleted',
+                        checked: 'unchecked'
+                    })
+                } else {
+                    return todo
+                }
+            })
+            this.setState({ todos: newTodo })
+
+            const response = await fetch(`/api/v1/todo-id/${ e._id }`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -99,9 +87,8 @@ export default class Index extends Component {
                 body: JSON.stringify({ todo: newState.todo })
             })
             const body = await response.text()
-            console.log(body)
             this.callApi(this.route(url, param));
-        } else {
+        }else {
             const prevState = this.state
             const newState = update(prevState, {
                 todo: {
@@ -111,25 +98,31 @@ export default class Index extends Component {
                     }
                 }
             })
-            // this.setState({ todo: newState.todo })
-            // console.log(this.state.todo)
+            
+            const newTodo = this.state.todos.map(todo => {
+                if(todo._id === e._id) {
+                    return Object.assign({}, todo, {
+                        status: 'completed',
+                        checked: 'checked'
+                    })
+                } else {
+                    return todo
+                }
+            })
+            this.setState({ todos: newTodo })
 
-            const response = await fetch(`/api/v1/todo-id/${ e.target.value }`, {
+            const response = await fetch(`/api/v1/todo-id/${ e._id }`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ todo: newState.todo })
             })
-            const body = await response.text()
-            console.log(body)
-                
+            const body = await response.text()                
             this.callApi(this.route(url,param));
         }
     }
     render() {
-        console.log(this.state.todos);
-        // console.log(this.state.todos);
         const { todos } = this.state
         const { handleMouseEnter, handleCheck } = this
         return <div>
@@ -143,7 +136,6 @@ export default class Index extends Component {
                             <SearchForm />
                             <TaskList 
                             todos = { todos }
-                            onMouseEnter = { handleMouseEnter }
                             onCheck = { handleCheck }
                             />
                         </div>

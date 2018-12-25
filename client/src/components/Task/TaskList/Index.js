@@ -12,18 +12,11 @@ class TaskList extends Component {
             todo: {},
         };
         this.handleCheck = this.handleCheck.bind(this)
-        this.onMouseEnter = this.onMouseEnter.bind(this)
-    }
-
-    // handle mouse enter event
-    onMouseEnter = e => {
-        e.preventDefault()
-        this.props.onMouseEnter(e)
     }
 
     //  handle checkbox
     handleCheck =  async e  => {
-        e.preventDefault()
+        // e.preventDefault()
         this.props.onCheck(e)
     }
     render() {
@@ -39,8 +32,11 @@ class TaskList extends Component {
                                         <div class="media-left pr-1">
                                             <span class="dragme ft-more-vertical"></span>
                                             <div class={ `icheckbox_square-blue ${ todo.checked } ` } style={ { position: 'relative' } }>
-                                                <input type='checkbox' name='todo-item-done' class='todo-item-done icheckbox_square-blue' value={ todo._id } onClick={ this.handleCheck } onMouseEnter={ this.onMouseEnter } 
-                                                    style={ { position: 'absolute', opacity: 0 } } />
+                                                <input type='checkbox'              name='todo-item-done'           class='todo-item-done           icheckbox_square-blue' 
+                                                    value={ todo._id } 
+                                                    onClick={ e =>  this.handleCheck(todo) }
+                                                    style={ { position: 'absolute', opacity: 0 } }
+                                                />
                                             </div>
                                         </div>
                                         <div class="media-body">

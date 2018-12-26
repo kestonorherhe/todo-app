@@ -104,6 +104,9 @@ export default class Index extends Component {
             })
             this.setState({ todos: newTodo })
 
+            // sets myTask to new array
+            this.setState({ myTask: this.state.myTask.filter(t => t._id !== e._id, {}) })
+
             const response = await fetch(`/api/v1/todo-id/${ e._id }`, {
                 method: 'PUT',
                 headers: {
@@ -111,8 +114,11 @@ export default class Index extends Component {
                 },
                 body: JSON.stringify({ todo: newState.todo })
             })
-            const body = await response.text()
+            if (response.ok) {
+                this.myTask()
+            }
             this.callApi(this.route(url, param));
+
         }else {
             const prevState = this.state
             const newState = update(prevState, {
@@ -136,6 +142,9 @@ export default class Index extends Component {
             })
             this.setState({ todos: newTodo })
 
+            // sets myTask to new array
+            this.setState({ myTask: this.state.myTask.filter(t => t._id !== e._id, {}) })
+
             const response = await fetch(`/api/v1/todo-id/${ e._id }`, {
                 method: 'PUT',
                 headers: {
@@ -143,7 +152,9 @@ export default class Index extends Component {
                 },
                 body: JSON.stringify({ todo: newState.todo })
             })
-            const body = await response.text()                
+            if (response.ok) {
+                this.myTask()
+            }
             this.callApi(this.route(url,param));
         }
     }

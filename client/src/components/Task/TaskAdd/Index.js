@@ -22,7 +22,6 @@ export default class TaskAdd extends Component {
         const newProps = this.state.todo;
         newProps[ e.target.name ] = e.target.value;
         this.setState({ todo: newProps })
-        console.log(newProps)
     }
 
     // handle form submit
@@ -36,7 +35,6 @@ export default class TaskAdd extends Component {
             body: JSON.stringify({ todo: this.state.todo }),
         });
         const body = await response.text();
-        console.log(body)
 
     }
     render() {

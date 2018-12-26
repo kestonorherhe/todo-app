@@ -26,6 +26,14 @@ router.get('/todos', (req, res, next) => {
     })
 })
 
+// get my task list
+router.get('/myTask', (req, res) => {
+    todo.find({ status: 'uncompleted' }, (err, todos) => {
+        if (err) res.send(err)
+        else res.json({ todos: todos })
+    })
+})
+
 // get all completed todos
 router.get('/todos/filter', (req, res) => {
     let query = req.query

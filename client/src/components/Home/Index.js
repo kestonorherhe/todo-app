@@ -30,6 +30,8 @@ export default class Index extends Component {
             return `/todos/filter/?deleted=${ param }`
         } else if (url.path === '/todos/tag/:param') {
             return `/todos/filter/?tag=${ param }`
+        } else if (url.path === '/myTask') {
+            return `/myTask`
         } else {
             return `/todos`
         }
@@ -41,7 +43,7 @@ export default class Index extends Component {
         const body = await response.json();
 
         if (response.status !== 200) throw Error(body.message);
-
+        console.log(body)
         return this.setState({ todos: body.todos })
     };
 
@@ -49,6 +51,7 @@ export default class Index extends Component {
     componentDidMount = () => {
         const url = this.props.match;
         const param = this.props.match.params.param
+        console.log(this.props.match)
         
         this.callApi(this.route(url,param))
     }
@@ -145,6 +148,7 @@ export default class Index extends Component {
 
     }
     render() {
+        console.log(this.state.todos);
         const { todos } = this.state
         const { handleMouseEnter, handleCheck, handleDelete } = this
         return <div>

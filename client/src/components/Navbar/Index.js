@@ -22,11 +22,11 @@ export default class Navbar extends Component {
                                     <i class="icon-home mr-1"></i>
                                     <span>Home</span>
                                 </a>
-                                <a href="#" class="list-group-item list-group-item-action border-0">
+                                <a href="/myTask" class="list-group-item list-group-item-action border-0">
                                     <i class="icon-list mr-1"></i>
                                     <span>My Tasks</span><span class="badge badge-secondary badge-pill float-right">{ MyTaskCount }</span>
                                 </a>
-                                <a href="#" class="list-group-item list-group-item-action border-0">
+                                <a href="/dashboard" class="list-group-item list-group-item-action border-0">
                                     <i class="icon-screen-desktop mr-1"></i>
                                     <span>Dashboard</span>
                                 </a>

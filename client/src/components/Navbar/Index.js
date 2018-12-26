@@ -4,12 +4,12 @@ import TaskAdd from '../Task/TaskAdd/Index';
 export default class Navbar extends Component {
     render() {
         // this filters the needed todo item from the array
-        const MyTaskCount = this.props.todos.filter(t => t.status === 'uncompleted').length
-        const ProjectCount = this.props.todos.filter(t => t.tag === 'project').length
-        const ProductCount = this.props.todos.filter(t => t.tag === 'product').length
-        const BugCount = this.props.todos.filter(t => t.tag === 'bug').length
-        const APICount = this.props.todos.filter(t => t.tag === 'API').length
-        const UICount = this.props.todos.filter(t => t.tag === 'UI').length
+        const MyTaskCount = this.props.myTask.length
+        const ProjectCount = this.props.allTodos.filter(t => t.tag === 'project').length
+        const ProductCount = this.props.allTodos.filter(t => t.tag === 'product').length
+        const BugCount = this.props.allTodos.filter(t => t.tag === 'bug').length
+        const APICount = this.props.allTodos.filter(t => t.tag === 'API').length
+        const UICount = this.props.allTodos.filter(t => t.tag === 'UI').length
         return <div>
             <div class="sidebar-left">
                 <div class="sidebar"><div class="sidebar-content d-none d-lg-block sidebar-shop">

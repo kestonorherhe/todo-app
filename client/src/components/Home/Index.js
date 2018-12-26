@@ -13,7 +13,9 @@ export default class Index extends Component {
         super(props)
         this.state = {
             todos: [],
-            todo: {}
+            todo: {},
+            myTask: [],
+            allTodos: []
         };
         this.handleCheck = this.handleCheck.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
@@ -30,8 +32,6 @@ export default class Index extends Component {
             return `/todos/filter/?deleted=${ param }`
         } else if (url.path === '/todos/tag/:param') {
             return `/todos/filter/?tag=${ param }`
-        } else if (url.path === '/myTask') {
-            return `/myTask`
         } else {
             return `/todos`
         }
@@ -43,17 +43,37 @@ export default class Index extends Component {
         const body = await response.json();
 
         if (response.status !== 200) throw Error(body.message);
-        console.log(body)
+        
         return this.setState({ todos: body.todos })
     };
 
+    myTask = async () => {
+        const response = await fetch(`/api/v1/myTask`);
+        if (!response.ok) {
+            throw Error(response.statusText)
+        }
+        const json = await response.json()
+        this.setState({ myTask: json.todos })
+    }
+
+    allTodos = async () => {
+        const response = await fetch(`/api/v1/todos`)
+        if (!response.ok) {
+            throw Error(response.statusText)
+        }
+        const json = await response.json()
+        this.setState({ allTodos: json.todos })
+    }
+
     //  fetch todos in DidMount lifecycle
-    componentDidMount = () => {
+    async componentDidMount() {
         const url = this.props.match;
         const param = this.props.match.params.param
-        console.log(this.props.match)
         
         this.callApi(this.route(url,param))
+
+        this.myTask()
+        this.allTodos()
     }
 
     //  handle checkbox
@@ -149,11 +169,15 @@ export default class Index extends Component {
     }
     render() {
         console.log(this.state.todos);
-        const { todos } = this.state
+        const { todos, myTask, allTodos } = this.state
         const { handleMouseEnter, handleCheck, handleDelete } = this
         return <div>
             <div class="app-content content">
-                <Navbar todos = { todos } />
+                <Navbar 
+                    todos = { todos }
+                    myTask = { myTask }
+                    allTodos = { allTodos }
+                />
                 <div class="content-right">
                     <div class="content-wrapper">
                         <div class="content-header row">

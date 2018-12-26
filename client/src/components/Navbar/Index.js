@@ -5,8 +5,8 @@ export default class Navbar extends Component {
     render() {
         // this filters the needed todo item from the array
         const MyTaskCount = this.props.myTask.length
-        const ProjectCount = this.props.allTodos.filter(t => t.tag === 'project').length
-        const ProductCount = this.props.allTodos.filter(t => t.tag === 'product').length
+        const ProjectCount = this.props.allTodos.filter(t => t.tag === 'Project').length
+        const ProductCount = this.props.allTodos.filter(t => t.tag === 'Product').length
         const BugCount = this.props.allTodos.filter(t => t.tag === 'bug').length
         const APICount = this.props.allTodos.filter(t => t.tag === 'API').length
         const UICount = this.props.allTodos.filter(t => t.tag === 'UI').length

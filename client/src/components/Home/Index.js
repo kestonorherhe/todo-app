@@ -70,9 +70,9 @@ export default class Index extends Component {
         const url = this.props.match;
         const param = this.props.match.params.param
         
+        this.myTask()
         this.callApi(this.route(url,param))
 
-        this.myTask()
         this.allTodos()
     }
 

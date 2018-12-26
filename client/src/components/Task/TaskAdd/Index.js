@@ -34,7 +34,9 @@ export default class TaskAdd extends Component {
             },
             body: JSON.stringify({ todo: this.state.todo }),
         });
-        const body = await response.text();
+        if (response.ok) {
+            window.location.replace('/todos')
+        }
 
     }
     render() {
